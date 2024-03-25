@@ -15,16 +15,22 @@ float floor2R = 980;
 float floor3R = 1560;
 float waitTime_ms = 10_000;
 int elevatorState = 1;
+
+
+// Reset the timer on start.
 void Init()
 {
 	clearTimer(T1);
 }
 
+// Stop all elevator motors.
 void StopElevator()
 {
 	stopMotor(elevatorMotor);
 }
 
+
+// Takes in a destination and moves to that location
 void MoveElevator(int state)
 {
 	elevatorState = state;
@@ -45,6 +51,7 @@ void MoveElevator(int state)
 
 	while (true)
 	{
+		// Figure out if we're above or below, run in the direction we need to, slow down when we get close.
 		if (SensorValue[quadEncoder] < targetFloor)
 		{
 			if (abs(SensorValue[quadEncoder] - targetFloor) > 100)
@@ -77,6 +84,8 @@ void MoveElevator(int state)
 	}
 }
 
+
+// Goofy switch statement to change lights
 void UpdateLights()
 {
 	if (elevatorState == 1)
@@ -107,6 +116,7 @@ task main()
 	Init();
 	while (true)
 	{
+		// Update our lights, look for button inputs, if no input over 10 second reset it to 0.
 		UpdateLights();
 		if (SensorValue[floor1Button] == 1)
 		{
